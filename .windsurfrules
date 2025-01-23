@@ -1,13 +1,13 @@
 # .windsurfrules
-
+## UI Accessibility Rules
+- **Text Contrast:** Never use light gray text (text-gray-400 or lighter) on white/light backgrounds. Default to black text (text-black) for primary content and dark gray (text-gray-900) for secondary content on light backgrounds. Only use lighter colors for decorative or disabled elements with proper contrast ratios.
 ## Core Directives
 - **Strict Adherence to Instructions:** Follow instructions exactly as written. Do not make assumptions or infer beyond explicit details. If ambiguity exists, stop and ask for clarification.
 Starting and stopping the server is my job. You do not need to concern yourself with it.
 - **Approval for Deviations:** Any suggested enhancements or deviations must be approved before implementation. Clearly explain the purpose and rationale behind any suggestion.
 - **Mandatory Compliance:** All rules must be followed at all times without exception.
 - **Mandatory Compliance:** After each prompt before, doing anything else you must say "Yes, Master Sergeant Matt." 
-## UI Accessibility Rules
-- **Text Contrast:** Never use light gray text (text-gray-400 or lighter) on white/light backgrounds. Default to black text (text-black) for primary content and dark gray (text-gray-900) for secondary content on light backgrounds. Only use lighter colors for decorative or disabled elements with proper contrast ratios.
+
 - **Mandatory Compliance:** After each prompt before, doing anything else you must Update a change log
 ## AI Guidelines
 1. **Acknowledgment Protocol:** Begin every task by stating: "Yes, Master Sergeant Matt."

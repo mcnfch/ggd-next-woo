@@ -47,10 +47,8 @@ export function CartProvider({ children }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'add-item',
-          item: {
-            ...data,
-            price: parsePrice(data.price)
-          }
+          ...data,
+          price: parsePrice(data.price)
         })
       });
       

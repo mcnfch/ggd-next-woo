@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import Redis from 'ioredis';
 import { v4 as uuidv4 } from 'uuid';
-import { parsePrice } from '@/utils/price';
 
 const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 const CART_COOKIE = 'cart_id';
@@ -22,8 +21,9 @@ async function getOrCreateCart(cartId) {
 
 async function calculateTotal(items) {
   return items.reduce((sum, item) => {
-    const price = parsePrice(item.price);
-    return sum + (price * item.quantity);
+    const price = typeof item.price === 'number' ? item.price : 
+                 typeof item.price === 'string' ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : 0;
+    return sum + (price * (item.quantity || 1));
   }, 0);
 }
 
@@ -57,27 +57,38 @@ export async function POST(request) {
     switch (action) {
       case 'add-item': {
         console.log('Adding item to cart:', JSON.stringify(data, null, 2));
-        const { item } = data;
-        if (!item || !item.id) {
+        // Handle potentially nested item structure
+        const itemData = data.item?.item || data.item || data;
+        
+        if (!itemData || !itemData.id) {
           console.error('Invalid item data received:', data);
-          throw new Error('Invalid item data');
+          return NextResponse.json({ message: 'Invalid item data: missing id' }, { status: 400 });
         }
 
-        const existingItem = cart.items.find(i => i.key === item.key);
+        // Parse price safely
+        const price = typeof itemData.price === 'number' ? itemData.price : 
+                     typeof itemData.price === 'string' ? parseFloat(itemData.price.replace(/[^0-9.]/g, '')) : 0;
+        
+        if (isNaN(price)) {
+          console.error('Invalid price received:', itemData.price);
+          return NextResponse.json({ message: 'Invalid price format' }, { status: 400 });
+        }
+
+        const existingItem = cart.items.find(i => i.key === itemData.key);
 
         if (existingItem) {
-          existingItem.quantity += item.quantity || 1;
+          existingItem.quantity += itemData.quantity || 1;
         } else {
           cart.items.push({
-            id: item.id,
-            name: item.name,
-            price: parsePrice(item.price),
-            quantity: item.quantity || 1,
-            variation: item.variation || {},
-            images: Array.isArray(item.images) && item.images.length > 0
-              ? item.images.map(img => typeof img === 'string' ? img : img.src || '')
+            id: itemData.id,
+            name: itemData.name,
+            price: price,
+            quantity: itemData.quantity || 1,
+            variation: itemData.variation || {},
+            images: Array.isArray(itemData.images) && itemData.images.length > 0
+              ? itemData.images.map(img => typeof img === 'string' ? img : img.src || '')
               : [],
-            key: item.key || `${item.id}-${Object.values(item.variation || {}).join('-')}`
+            key: itemData.key || `${itemData.id}-${Object.values(itemData.variation || {}).join('-')}`
           });
         }
         break;

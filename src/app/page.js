@@ -10,56 +10,38 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 -mt-[40px]">
+      <section className="flex justify-center bg-gradient-to-r from-[#FF6EC7] via-[#6A82FB] to-[#FFD200]">
         <Image
-          src="/images/gg_banner.png"
-          alt="Groovy Gallery Designs Banner"
-          fill
-          className="object-cover"
+          src="/images/winter25.png"
+          alt="Winter Sale 25% Off"
+          width={350}
+          height={200}
           priority
         />
-        <div className="relative z-10 container mx-auto px-4 text-center flex flex-col items-center gap-6">
-          <h1 className="text-4xl md:text-6xl font-bold text-black">
-            Festival Fashion, Accessories & Groovy Gear
-          </h1>
-          <p className="text-xl md:text-2xl text-black">
-            Express yourself with our unique collection of rave wear and festival gear
-          </p>
-          <p className="text-xl md:text-2xl text-black">
-            Rizz up your campsite with our groovy gear
-          </p>
-          <a
-            href="/category/new-arrivals"
-            className="inline-block bg-black text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors mt-4"
-          >
-            Shop New Arrivals
-          </a>
-        </div>
       </section>
 
       {/* Featured Categories */}
-      <section className="py-16 bg-transparent">
+      <section className="py-4 md:py-16 bg-transparent">
         <div className="container mx-auto px-4">
-          <div className="flex justify-center mb-12">
-            <h2 className="text-3xl font-bold text-black backdrop-blur-md bg-white/75 py-4 rounded-lg px-8">Shop by Category</h2>
+          <div className="flex justify-center mb-4 md:mb-12">
+            <h2 className="text-xl font-bold text-black backdrop-blur-md bg-white/75 py-1 rounded-lg px-4">Shop by Category</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((category) => (
-              <div key={category.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div key={category.id} className="relative bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="aspect-w-16 aspect-h-9 relative h-[300px]">
                   {category.image && (
                     <Image
                       src={category.image.src}
                       alt={category.name}
-                      fill
-                      className="object-cover"
+                      width={category.image.width}
+                      height={category.image.height}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   )}
                 </div>
-                <div className="p-6 bg-white">
-                  <h3 className="text-xl font-semibold mb-2 text-black">{category.name}</h3>
-                  <p className="text-black mb-4">{category.description || `Explore our ${category.name} collection`}</p>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/90">
+                  <h3 className="text-lg font-semibold text-black">{category.name}</h3>
                   <a href={`/category/${category.slug}`} className="text-black font-semibold hover:text-purple-700">
                     Shop {category.name} →
                   </a>

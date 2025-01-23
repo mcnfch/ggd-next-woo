@@ -54,6 +54,8 @@ export async function getTopLevelCategories() {
       image: category.image ? {
         src: category.image.src,
         alt: category.image.alt || category.name,
+        width: 1280, // Default width from WooCommerce images
+        height: 1280 // Default height from WooCommerce images
       } : null,
     }));
   } catch (error) {
