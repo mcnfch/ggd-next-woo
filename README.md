@@ -53,12 +53,13 @@ A modern, feature-rich e-commerce platform built with Next.js 15, WooCommerce in
 
 ### 🔧 Technical Features
 - **Performance**
+  - Next.js App Router
   - Server-side rendering
   - Image optimization
   - Redis caching
   - Sitemap generation
 
-  ![Performance Metrics](public/images/Screenshot%202025-01-24%20at%206.36.36%20PM.png)
+  ![Performance Metrics](public/images/Screenshot%202025-01-24%20at%206.36.36%E2%80%AFPM.png)
   *Lighthouse performance score showing optimal loading and rendering metrics*
 
 - **Security**
