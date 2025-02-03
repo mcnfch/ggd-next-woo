@@ -63,8 +63,11 @@ export default function CartSlideout() {
                             <div className="text-black">Your cart is empty</div>
                           ) : (
                             <ul role="list" className="-my-6 divide-y divide-gray-200">
-                              {cart.items.map((item) => (
-                                <CartItem key={item.key} item={item} />
+                              {cart.items?.map((item) => (
+                                <CartItem 
+                                  key={`${item.id}-${item.selectedOptions ? Object.values(item.selectedOptions).join('-') : ''}`} 
+                                  item={item} 
+                                />
                               ))}
                             </ul>
                           )}
@@ -75,7 +78,7 @@ export default function CartSlideout() {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-black">
                         <p>Subtotal</p>
-                        <p>${cart.total.toFixed(2)}</p>
+                        <p>${cart?.total?.toFixed(2) || '0.00'}</p>
                       </div>
                       <p className="mt-0.5 text-sm text-black">Free shipping on all orders.</p>
                       <div className="mt-6">

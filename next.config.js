@@ -14,6 +14,12 @@ const nextConfig = {
         port: '',
         pathname: '/avatar/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'ae01.alicdn.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   experimental: {

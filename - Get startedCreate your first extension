@@ -1,0 +1,721 @@
+- Get startedCreate your first extensionSet up a dev environment[Join the Community Slack](https://woocommerce.com/community-slack)
+- [Create your first extension](https://developer.woocommerce.com/docs/how-to-build-your-first-extension/)
+- [Set up a dev environment](https://developer.woocommerce.com/docs/setting-up-your-development-environment/)
+- [Join the Community Slack](https://woocommerce.com/community-slack)
+- Stay updatedRoadmap InsightsChangelogRelease downloads[Newsletter](https://developer.woocommerce.com/newsletter/)
+- [Roadmap Insights](https://developer.woocommerce.com/roadmap/)
+- [Changelog](https://developer.woocommerce.com/changelog/)
+- [Release downloads](https://developer.woocommerce.com/releases/)
+- [Newsletter](https://developer.woocommerce.com/newsletter/)
+- Grow with WooBecome a Woo agency partnerBecome a Marketplace partner[Contribute to WooCommerce](https://developer.woocommerce.com/docs/contributing-to-woocommerce-core/)
+- [Become a Woo agency partner](https://woocommerce.com/for-agencies/)
+- [Become a Marketplace partner](https://woocommerce.com/partners/)
+- [Contribute to WooCommerce](https://developer.woocommerce.com/docs/contributing-to-woocommerce-core/)
+- [Docs](https://developer.woocommerce.com/docs/)
+[Get started](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+- [Create your first extension](https://developer.woocommerce.com/docs/how-to-build-your-first-extension/)
+- [Set up a dev environment](https://developer.woocommerce.com/docs/setting-up-your-development-environment/)
+- [Join the Community Slack](https://woocommerce.com/community-slack)
+[Create your first extension](https://developer.woocommerce.com/docs/how-to-build-your-first-extension/)
+[Set up a dev environment](https://developer.woocommerce.com/docs/setting-up-your-development-environment/)
+[Join the Community Slack](https://woocommerce.com/community-slack)
+[Stay updated](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+- [Roadmap Insights](https://developer.woocommerce.com/roadmap/)
+- [Changelog](https://developer.woocommerce.com/changelog/)
+- [Release downloads](https://developer.woocommerce.com/releases/)
+- [Newsletter](https://developer.woocommerce.com/newsletter/)
+[Roadmap Insights](https://developer.woocommerce.com/roadmap/)
+[Changelog](https://developer.woocommerce.com/changelog/)
+[Release downloads](https://developer.woocommerce.com/releases/)
+[Newsletter](https://developer.woocommerce.com/newsletter/)
+[Grow with Woo](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+- [Become a Woo agency partner](https://woocommerce.com/for-agencies/)
+- [Become a Marketplace partner](https://woocommerce.com/partners/)
+- [Contribute to WooCommerce](https://developer.woocommerce.com/docs/contributing-to-woocommerce-core/)
+[Become a Woo agency partner](https://woocommerce.com/for-agencies/)
+[Become a Marketplace partner](https://woocommerce.com/partners/)
+[Contribute to WooCommerce](https://developer.woocommerce.com/docs/contributing-to-woocommerce-core/)
+[Docs](https://developer.woocommerce.com/docs/)
+
+# Tutorial: Placing an order using the Store API
+
+[Niels Lange](https://developer.woocommerce.com/author/nielslange/)
+•
+[Sep 20, 2023](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Developer Resources](https://developer.woocommerce.com/category/developer-resources/)
+While looking into [a Store API related GitHub issue](https://github.com/woocommerce/woocommerce-blocks/issues/10963), I decided to create a brief tutorial on how to place an order using the Store API when using WooCommerce Blocks.
+This tutorial uses a REST client for the examples. The screenshots are from Insomnia, but you can also use other REST clients like [Postman](https://www.postman.com/) if you want.
+The [Store API](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/README.md) allows placing an order using RESTful requests.
+💡 RESTful requests are a standardized way for applications to communicate with servers over the internet. These requests use different methods to perform specific actions:• GET: Fetch information from the server.• POST: Creates information to the server.• PUT: Updates existing information on the server.• DELETE: Deleting information from the server.
+In this tutorial, we will walk through the following steps in order to achieve placing an order with the Store API using RESTful requests:
+1. [Get a nonce token](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+2. [Fetch all available products](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+3. [Add a product to the cart](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+4. [Fetch the billing address and payment method](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+5. [Place the order](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Get a nonce token](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Fetch all available products](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Add a product to the cart](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Fetch the billing address and payment method](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Place the order](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+
+### Get a nonce token
+First, we need to fetch a valid [Nonce Token](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/nonce-tokens.md). To get the nonce, we make the following request:
+
+```
+GET https://store.test/wp-json/wc/store/v1/cart
+```
+
+In the headers of the response, we can see the nonce, which in my case is 25222b6f2b:
+
+```
+headers
+```
+
+
+```
+25222b6f2b
+```
+
+💡 A nonce is a one-time unique or random number used in computing to enhance security. It helps ensure that a request or action is legitimate and hasn’t been tampered with.
+We copy that nonce and add it as a headers argument in our REST client:
+
+```
+headers
+```
+
+### Fetch all available products
+Next, we need to know the ID of the product we want to order. For this example, I decided to go with the product named Beanie with Logo, one of the sample products in WooCommerce core. To list all available products, we make the following request:
+
+```
+GET https://store.test/wp-json/wc/store/v1/products
+```
+
+We then get a list with all products, which also includes the product, Beanie with Logo:
+
+### Add a product to the cart
+The ID of this product is 27. We copy this ID and make the following request, to add it to the cart:
+
+```
+27
+```
+
+
+```
+POST https://store.test/wp-json/wc/store/v1/cart/add-item?id=27&quantity=1
+```
+
+💡 In comparison to the previous GET requests, adding a product to the cart requires a POST request.
+After making the request, we can see that the desired product had been added to the cart:
+We can also see that the first shipping rate is selected by default (see also [GitHub Issue: [StoreApi] Support default shipping rates #10963](https://github.com/woocommerce/woocommerce-blocks/issues/10963)):
+💡Of course, it’s possible placing multiple products as well as one product multiple times to the cart.To add multiple products to the cart, simply call the /wp-json/wc/store/v1/cart/add-item endpoint with various products.To add one product multiple times to the cart, simply adjust the parameter quantity of the /wp-json/wc/store/v1/cart/add-item endpoint.Further information can be found in [the Store API docs](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/cart.md).
+
+```
+/wp-json/wc/store/v1/cart/add-item
+```
+
+
+```
+quantity
+```
+
+
+```
+/wp-json/wc/store/v1/cart/add-item
+```
+
+### Fetch the billing address and payment method
+https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/checkout.mdBefore placing the order, we need at least a billing address and a payment method. We can take the following example request from the Checkout API docs:
+
+```
+billing address
+```
+
+
+```
+payment method
+```
+
+
+```
+{
+	"billing_address": {
+		"first_name": "Peter",
+		"last_name": "Venkman",
+		"company": "",
+		"address_1": "550 Central Park West",
+		"address_2": "Corner Penthouse Spook Central",
+		"city": "New York",
+		"state": "NY",
+		"postcode": "10023",
+		"country": "US",
+		"email": "admin@example.com",
+		"phone": "555-2368"
+	},
+	"shipping_address": {
+		"first_name": "Peter",
+		"last_name": "Venkman",
+		"company": "",
+		"address_1": "550 Central Park West",
+		"address_2": "Corner Penthouse Spook Central",
+		"city": "New York",
+		"state": "NY",
+		"postcode": "10023",
+		"country": "US"
+	},
+	"customer_note": "Test notes on order.",
+	"create_account": false,
+	"payment_method": "cheque",
+	"payment_data": [],
+	"extensions": {
+		"some-extension-name": {
+			"some-data-key": "some data value"
+		}
+	}
+}
+```
+
+Apart from that, we can also use the following, minimalistic, example request:
+
+```
+{
+	"billing_address": {
+		"first_name": "Peter",
+		"last_name": "Venkman",
+		"company": "",
+		"address_1": "550 Central Park West",
+		"address_2": "Corner Penthouse Spook Central",
+		"city": "New York",
+		"state": "NY",
+		"postcode": "10023",
+		"country": "US",
+		"email": "admin@example.com",
+		"phone": "555-2368"
+	},
+  "payment_method": "cheque"
+}
+```
+
+### Place the order
+The following screenshot shows how to add the billing and payment data from the previous step to our POST request to place the order:
+To place the order itself, we make the following request:
+
+```
+POST https://store.test/wp-json/wc/store/v1/checkout
+```
+
+As a final step, we can look up the placed order within WP Admin, to verify that all provided information are correct. (We can also see that the default shipping address had been selected.)
+
+## Resources
+- [Get Cart Info (/wc/store/v1/cart)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/cart.md)
+- [Add Item to Cart (/wc/store/v1/cart/add-item)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/cart.md)
+- [List Products (/wc/store/v1/products)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/products.md)
+- [Checkout (/wc/store/v1/checkout)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/checkout.md)
+[Get Cart Info (/wc/store/v1/cart)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/cart.md)
+
+```
+/wc/store/v1/cart
+```
+
+[Add Item to Cart (/wc/store/v1/cart/add-item)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/cart.md)
+
+```
+/wc/store/v1/cart/add-item
+```
+
+[List Products (/wc/store/v1/products)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/products.md)
+
+```
+/wc/store/v1/products
+```
+
+[Checkout (/wc/store/v1/checkout)](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/checkout.md)
+
+```
+/wc/store/v1/checkout
+```
+
+## Thoughts & feedback
+We hope you found this tutorial helpful! If you’ve got any questions or there’s another tutorial topic you’re keen to see, feel free to drop a comment or reach out in the [WooCommerce Community Slack](https://woocommerce.com/community-slack/). Your feedback helps us create content that better serves you. Thanks for reading!
+
+### Share this:
+
+- [Click to share on Tumblr (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=tumblr)
+- [Click to share on X (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=x)
+- [Click to share on LinkedIn (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=linkedin)
+- [Click to share on Facebook (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=facebook)
+- 
+[Click to share on Tumblr (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=tumblr)
+[Click to share on X (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=x)
+[Click to share on LinkedIn (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=linkedin)
+[Click to share on Facebook (Opens in new window)](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/?share=facebook)
+
+## Keep yourself in the loop!
+
+Δdocument.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+
+### 6 responses to “Tutorial: Placing an order using the Store API”
+
+1. 
+
+
+
+
+
+Amit Iluz
+
+October 17, 2023
+
+
+
+Hi, we have been trying to setup a payment using a Credit card for a few days and we can’t understand the right structure to send “payment_data” field.
+Can you please assist? we are using Bluesnap using their “Bluesnap for Woocommerce” plugin we contacted them as well and they didn’t knew the answer.
+        "payment_data" => [
+            array("bluesnap_card_info" => $cardData)
+        ]
+
+
+
+
+
+
+Reply
+
+
+
+
+
+
+
+
+Niels Lange
+
+October 18, 2023
+
+
+
+Hello Amit,
+Thank you for reaching out. You can find details on payment processing at this link. Additionally, while this section provides an example using Stripe, it also states:
+There are numerous payment gateways available. Each expects different payment_data. We can’t list all possible requests for every gateway. It’s best to consult the authors of the payment gateway plugins you’re using for detailed information.
+I’m afraid, you need to reach out to Bluespan again for clarity on the payment_data schema. Hope this helps you move forward.
+
+
+
+
+
+Reply
+
+
+
+2. 
+
+
+
+
+
+Niels Lange
+
+October 18, 2023
+
+
+
+Hello Amit,
+Thank you for reaching out. You can find details on payment processing at this link. Additionally, while this section provides an example using Stripe, it also states:
+There are numerous payment gateways available. Each expects different payment_data. We can’t list all possible requests for every gateway. It’s best to consult the authors of the payment gateway plugins you’re using for detailed information.
+I’m afraid, you need to reach out to Bluespan again for clarity on the payment_data schema. Hope this helps you move forward.
+
+
+
+
+
+Reply
+
+
+
+3. 
+
+
+
+
+
+Hasgaard
+
+November 18, 2023
+
+
+
+Hi,
+Thank you for this explainer ! Appreciated.
+I get the error woocommerce_rest_missing_nonce. I’ve tried to set the nonce in headers and/or in post values with these names: Nonce, nonce, X-WP-Nonce, X-WC-Store-API-Nonce
+What do I miss ?
+Have a good day !
+
+
+
+
+
+Reply
+
+
+
+4. 
+
+
+
+
+
+Artem
+
+July 12, 2024
+
+
+
+Thank you very much for the article, cos it looks no such info on documentation and youtube full of tutorials which tells you just get admin keys for wocoommerce rest api and use em everywhere.
+Now i’m developing react native app for existing woocommerce shop and it is more performant and convenient to have cart just locally – made it just by means react. So my question isn’t it possible to make an order like with one order-post without need to add to cart, or may be it is a feature request
+Best regards
+
+
+
+
+
+Reply
+
+
+
+
+
+
+
+
+Nadir Seghir
+
+July 15, 2024
+
+
+
+Hey! It’s currently not possible to place an order without an existing Cart. I highly suggest you use the Store API cart features in your app, this ensures calculations are corrects, stock is handled correctly, coupons validated. Otherwise, you can create a cart and place an order at the same request from your app behind the scenes.
+
+
+
+
+
+Reply
+
+
+
+
+
+
+
+
+artem
+
+July 16, 2024
+
+
+
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+
+
+
+
+
+Reply
+
+
+
+5. 
+
+
+
+
+
+Nadir Seghir
+
+July 15, 2024
+
+
+
+Hey! It’s currently not possible to place an order without an existing Cart. I highly suggest you use the Store API cart features in your app, this ensures calculations are corrects, stock is handled correctly, coupons validated. Otherwise, you can create a cart and place an order at the same request from your app behind the scenes.
+
+
+
+
+
+Reply
+
+
+
+
+
+
+
+
+artem
+
+July 16, 2024
+
+
+
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+
+
+
+
+
+Reply
+
+
+
+6. 
+
+
+
+
+
+artem
+
+July 16, 2024
+
+
+
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+
+
+
+
+
+Reply
+
+
+
+[Amit Iluz](http://privatemichael.wordpress.com)
+[October 17, 2023](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+
+### 6 responses to “Tutorial: Placing an order using the Store API”
+
+Hi, we have been trying to setup a payment using a Credit card for a few days and we can’t understand the right structure to send “payment_data” field.
+Can you please assist? we are using Bluesnap using their “Bluesnap for Woocommerce” plugin we contacted them as well and they didn’t knew the answer.
+
+```
+"payment_data" => [
+            array("bluesnap_card_info" => $cardData)
+        ]
+```
+
+
+```
+"payment_data" => [
+            array("bluesnap_card_info" => $cardData)
+        ]
+```
+
+Reply
+1. 
+
+
+
+
+
+Niels Lange
+
+October 18, 2023
+
+
+
+Hello Amit,
+Thank you for reaching out. You can find details on payment processing at this link. Additionally, while this section provides an example using Stripe, it also states:
+There are numerous payment gateways available. Each expects different payment_data. We can’t list all possible requests for every gateway. It’s best to consult the authors of the payment gateway plugins you’re using for detailed information.
+I’m afraid, you need to reach out to Bluespan again for clarity on the payment_data schema. Hope this helps you move forward.
+
+
+
+
+
+Reply
+
+
+
+[Niels Lange](https://nielslange.blog)
+[October 18, 2023](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+Hello Amit,
+Thank you for reaching out. You can find details on payment processing at this link. Additionally, while [this section](https://github.com/woocommerce/woocommerce-blocks/blob/trunk/src/StoreApi/docs/checkout.md) provides an example using Stripe, it also states:
+There are numerous payment gateways available. Each expects different payment_data. We can’t list all possible requests for every gateway. It’s best to consult the authors of the payment gateway plugins you’re using for detailed information.
+
+```
+payment_data
+```
+
+I’m afraid, you need to reach out to Bluespan again for clarity on the payment_data schema. Hope this helps you move forward.
+
+```
+payment_data
+```
+
+Reply
+[November 18, 2023](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+Hi,
+Thank you for this explainer ! Appreciated.
+I get the error woocommerce_rest_missing_nonce. I’ve tried to set the nonce in headers and/or in post values with these names: Nonce, nonce, X-WP-Nonce, X-WC-Store-API-Nonce
+What do I miss ?
+Have a good day !
+Reply
+[July 12, 2024](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+Thank you very much for the article, cos it looks no such info on documentation and youtube full of tutorials which tells you just get admin keys for wocoommerce rest api and use em everywhere.
+Now i’m developing react native app for existing woocommerce shop and it is more performant and convenient to have cart just locally – made it just by means react. So my question isn’t it possible to make an order like with one order-post without need to add to cart, or may be it is a feature request
+Best regards
+Reply
+1. 
+
+
+
+
+
+Nadir Seghir
+
+July 15, 2024
+
+
+
+Hey! It’s currently not possible to place an order without an existing Cart. I highly suggest you use the Store API cart features in your app, this ensures calculations are corrects, stock is handled correctly, coupons validated. Otherwise, you can create a cart and place an order at the same request from your app behind the scenes.
+
+
+
+
+
+Reply
+
+
+
+
+
+
+
+
+artem
+
+July 16, 2024
+
+
+
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+
+
+
+
+
+Reply
+
+
+
+2. 
+
+
+
+
+
+artem
+
+July 16, 2024
+
+
+
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+
+
+
+
+
+Reply
+
+
+
+[July 15, 2024](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+Hey! It’s currently not possible to place an order without an existing Cart. I highly suggest you use the Store API cart features in your app, this ensures calculations are corrects, stock is handled correctly, coupons validated. Otherwise, you can create a cart and place an order at the same request from your app behind the scenes.
+Reply
+1. 
+
+
+
+
+
+artem
+
+July 16, 2024
+
+### 6 responses to “Tutorial: Placing an order using the Store API”
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+
+
+
+
+
+Reply
+
+
+
+[July 16, 2024](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+Hey, thank you! I figured it out by trial and error 🙂 (and github comments) cos documentation says very little or nothing about cart-token. And it is bit confusing why this cart-token always mutate from request to request or i do something wrong.
+Reply
+
+### Leave a Reply [Cancel reply](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+[Cancel reply](https://developer.woocommerce.com/2023/09/20/tutorial-placing-an-order-using-the-store-api/)
+Your email address will not be published. Required fields are marked *
+Comment *
+Name *
+Email *
+Website
+Save my name, email, and website in this browser for the next time I comment.
+Notify me of follow-up comments by email.
+Notify me of new posts by email.
+Δdocument.getElementById( "ak_js_2" ).setAttribute( "value", ( new Date() ).getTime() );
+
+### Related posts
+- [Store API is now considered stable](https://developer.woocommerce.com/2022/03/25/store-api-is-now-considered-stable/)DateMarch 25, 2022
+- [WooCommerce Blocks 4.0 Release Notes](https://developer.woocommerce.com/2020/12/08/woocommerce-blocks-4-0-release-notes/)DateDecember 8, 2020
+- [Changes to Store API loading for performance](https://developer.woocommerce.com/2024/04/01/changes-to-store-api-loading-for-performance/)DateApril 1, 2024
+[Store API is now considered stable](https://developer.woocommerce.com/2022/03/25/store-api-is-now-considered-stable/)
+[WooCommerce Blocks 4.0 Release Notes](https://developer.woocommerce.com/2020/12/08/woocommerce-blocks-4-0-release-notes/)
+[Changes to Store API loading for performance](https://developer.woocommerce.com/2024/04/01/changes-to-store-api-loading-for-performance/)
+
+### UPDATES
+- [Changelog](https://developer.woocommerce.com/changelog/)
+- [Release Packages](https://developer.woocommerce.com/releases/)
+- [Release Calendar](https://developer.woocommerce.com/release-calendar/)
+- [Newsletter](https://developer.woocommerce.com/newsletter/)
+[Changelog](https://developer.woocommerce.com/changelog/)
+[Release Packages](https://developer.woocommerce.com/releases/)
+[Release Calendar](https://developer.woocommerce.com/release-calendar/)
+[Newsletter](https://developer.woocommerce.com/newsletter/)
+
+### INFORMATION
+- [About](https://developer.woocommerce.com/about/)
+- [Contact Us](https://woocommerce.com/contact-us/)
+[About](https://developer.woocommerce.com/about/)
+[Contact Us](https://woocommerce.com/contact-us/)
+
+### COMMUNITY
+- [GitHub Discussions](https://github.com/woocommerce/woocommerce/discussions)
+- [Community Slack](https://woocommerce.com/community-slack/)
+- [Community Forum](https://wordpress.org/support/plugin/woocommerce/)
+- [Code of Conduct](https://developer.woocommerce.com/code-of-conduct/)
+- [Community Participation Guide](https://developer.woocommerce.com/community-participation-guide/)
+[GitHub Discussions](https://github.com/woocommerce/woocommerce/discussions)
+[Community Slack](https://woocommerce.com/community-slack/)
+[Community Forum](https://wordpress.org/support/plugin/woocommerce/)
+[Code of Conduct](https://developer.woocommerce.com/code-of-conduct/)
+[Community Participation Guide](https://developer.woocommerce.com/community-participation-guide/)
+
+### GROW WITH WOO
+- [Become a Woo agency partner](https://woocommerce.com/for-agencies/)
+- [Become a Marketplace partner](https://woocommerce.com/partners/)
+- [Contribute to WooCommerce](https://developer.woocommerce.com/docs/contributing-to-woocommerce-core/)
+[Become a Woo agency partner](https://woocommerce.com/for-agencies/)
+[Become a Marketplace partner](https://woocommerce.com/partners/)
+[Contribute to WooCommerce](https://developer.woocommerce.com/docs/contributing-to-woocommerce-core/)
+
+### NEVER MISS A WOOCOMMERCE DEVELOPMENT
+Δdocument.getElementById( "ak_js_3" ).setAttribute( "value", ( new Date() ).getTime() );
+COPYRIGHT WOOCOMMERCE 2024
+TERMS & CONDITIONS  PRIVACY POLICY  [PRIVACY NOTICE FOR CALIFORNIA USERS](https://automattic.com/privacy/?utm_medium=automattic_referred&utm_source=wccom_footer)
+Do not sell or share my personal information

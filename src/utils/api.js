@@ -70,18 +70,33 @@ function transformUrl(url) {
   
   // Handle product category URLs
   if (url.includes('/product-category/')) {
-    return `/category/${url.split('/product-category/')[1].replace(/\/$/, '')}`;
+    return `/product-category/${url.split('/product-category/')[1].replace(/\/$/, '')}`;
   }
   
   // Don't transform custom designs URL
   if (url.includes('custom-designs')) {
     return url;
   }
+
+  // Handle product URLs
+  if (url.includes('/product/')) {
+    return `/product-details/${url.split('/product/')[1].replace(/\/$/, '')}`;
+  }
   
   // Handle woo.groovygallerydesigns.com URLs
   if (url.includes('woo.groovygallerydesigns.com')) {
     const urlObj = new URL(url);
-    return urlObj.pathname.replace(/\/$/, '');
+    let path = urlObj.pathname.replace(/\/$/, '');
+    
+    // Transform paths from the WooCommerce site
+    if (path.includes('/product/')) {
+      path = path.replace('/product/', '/product-details/');
+    }
+    if (path.includes('/product-category/')) {
+      path = path.replace('/product-category/', '/product-category/');
+    }
+    
+    return path;
   }
   
   return url;

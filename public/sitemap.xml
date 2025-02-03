@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<sitemap><loc>https://groovygallerydesigns.com/sitemap-products.xml</loc></sitemap>
-<sitemap><loc>https://groovygallerydesigns.com/sitemap-categories.xml</loc></sitemap>
-<sitemap><loc>https://groovygallerydesigns.com/sitemap-images.xml</loc></sitemap>
-<sitemap><loc>https://groovygallerydesigns.com/sitemap-blog.xml</loc></sitemap>
+<sitemap><loc>https://woo.groovygallerydesigns.com/sitemap-0.xml</loc></sitemap>
+<sitemap><loc>https://woo.groovygallerydesigns.com/sitemap.xml</loc></sitemap>
 </sitemapindex>

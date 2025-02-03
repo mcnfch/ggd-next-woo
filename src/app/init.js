@@ -1,4 +1,3 @@
-import { Redis } from 'ioredis';
 import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
 import fs from 'fs/promises';
 import path from 'path';
@@ -20,11 +19,6 @@ export async function initializeServer() {
       consumerKey: process.env.NEXT_PUBLIC_WOOCOMMERCE_KEY,
       consumerSecret: process.env.NEXT_PUBLIC_WOOCOMMERCE_SECRET,
       version: 'wc/v3'
-    });
-
-    const redis = new Redis({
-      host: process.env.REDIS_HOST || 'localhost',
-      port: process.env.REDIS_PORT || 6379,
     });
 
     const PRODUCTS_FILE = path.join(process.cwd(), 'data', 'products.json');
@@ -83,46 +77,15 @@ export async function initializeServer() {
         }
       }
 
-      console.log('Loading products into Redis...');
-      let successCount = 0;
-      let failCount = 0;
-
-      for (const product of products) {
-        try {
-          await redis.set(`product:${product.id}`, JSON.stringify(product));
-          await redis.set(`product_slug:${product.slug}`, JSON.stringify(product));
-          
-          for (const category of product.categories) {
-            await redis.sadd(`category:${category.slug}`, product.id);
-          }
-          
-          successCount++;
-          if (successCount % 10 === 0) {
-            console.log(`Progress: ${successCount}/${products.length} products loaded`);
-          }
-        } catch (error) {
-          console.error(`Error loading product ${product.id}:`, error);
-          failCount++;
-        }
-      }
-
-      console.log('\nDatabase initialization complete:');
-      console.log(`Successfully loaded: ${successCount} products`);
-      console.log(`Failed to load: ${failCount} products`);
-
-      await redis.quit();
       resolve({
         status: 'success',
         results: {
-          success: successCount,
-          failed: failCount,
           total: products.length,
           usedCache: !shouldUpdateFile
         }
       });
     } catch (error) {
       console.error('Database initialization failed:', error);
-      await redis.quit();
       resolve({ status: 'error', message: error.message });
     }
   });

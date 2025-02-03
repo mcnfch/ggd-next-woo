@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { parsePrice } from '@/utils/price';
+import { parsePrice, toCents, fromCents, validatePrice } from '@/utils/price';
 
 const CartContext = createContext(null);
 
@@ -125,22 +125,35 @@ export function CartProvider({ children }) {
 
   // Format cart data for Stripe
   const formatStripeItems = () => {
-    return cart.items.map(item => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.name,
-          images: item.images
+    return cart.items.map(item => {
+      const itemPrice = parsePrice(item.price);
+      if (!validatePrice(itemPrice)) {
+        throw new Error(`Invalid price for item: ${item.name}`);
+      }
+      return {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: item.name,
+            images: item.images,
+            metadata: {
+              product_id: item.id,
+              sku: item.sku || '',
+            }
+          },
+          unit_amount: toCents(itemPrice)
         },
-        unit_amount: Math.round(parsePrice(item.price) * 100) // Convert to cents
-      },
-      quantity: item.quantity
-    }));
+        quantity: item.quantity
+      };
+    });
   };
 
   // Get cart total in cents for Stripe
   const getStripeTotalAmount = () => {
-    return Math.round(cart.total * 100);
+    if (!validatePrice(cart.total)) {
+      throw new Error('Invalid cart total');
+    }
+    return toCents(cart.total);
   };
 
   return (

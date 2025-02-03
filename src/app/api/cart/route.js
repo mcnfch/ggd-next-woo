@@ -27,6 +27,17 @@ async function calculateTotal(items) {
   }, 0);
 }
 
+// Generate a unique key for cart item based on product ID and selected options
+function generateItemKey(item) {
+  const optionsKey = item.selectedOptions 
+    ? Object.entries(item.selectedOptions)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, value]) => `${key}:${value}`)
+        .join('|')
+    : '';
+  return `${item.id}${optionsKey ? `|${optionsKey}` : ''}`;
+}
+
 export async function GET() {
   try {
     const cookieStore = await cookies();
@@ -61,7 +72,9 @@ export async function POST(request) {
           return NextResponse.json({ error: 'Invalid item data' }, { status: 400 });
         }
 
-        const existingItem = cart.items.find(i => i.key === item.key);
+        // Generate a unique key for the item based on its ID and selected options
+        const itemKey = generateItemKey(item);
+        const existingItem = cart.items.find(i => generateItemKey(i) === itemKey);
 
         if (existingItem) {
           existingItem.quantity += item.quantity || 1;
@@ -71,9 +84,9 @@ export async function POST(request) {
             name: item.name,
             price: parseFloat(item.price) || 0,
             quantity: item.quantity || 1,
-            images: item.images || [],
-            variation: item.variation || {},
-            key: item.key
+            images: Array.isArray(item.images) ? item.images : [],
+            selectedOptions: item.selectedOptions || {},
+            key: itemKey
           });
         }
         break;
@@ -99,15 +112,22 @@ export async function POST(request) {
     }
 
     cart.total = await calculateTotal(cart.items);
+
+    // Save cart
     await redis.set(`cart:${cartId}`, JSON.stringify(cart));
     
+    // Set cookie if it doesn't exist
     const response = NextResponse.json(cart);
     if (!cookieStore.get(CART_COOKIE)) {
       response.cookies.set(CART_COOKIE, cartId, {
-        path: '/',
         maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
       });
     }
+    
     return response;
   } catch (error) {
     console.error('Failed to update cart:', error);

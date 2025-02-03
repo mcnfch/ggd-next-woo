@@ -10,7 +10,7 @@ import { formatPrice } from '@/lib/utils';
 export default function ProductDetails({ product, relatedProducts }) {
   // Use environment variables for domain
   const frontendDomain = process.env.NEXT_PUBLIC_FRONTEND_URL || '';
-  const productUrl = `${frontendDomain}/product/${product.slug}`;
+  const productUrl = `${frontendDomain}/product-details/${product.slug}`;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -52,7 +52,7 @@ export default function ProductDetails({ product, relatedProducts }) {
       "item": {
         "@type": "Product",
         "name": relatedProduct.name,
-        "url": `${frontendDomain}/product/${relatedProduct.slug}`,
+        "url": `${frontendDomain}/product-details/${relatedProduct.slug}`,
         "image": relatedProduct.images[0]?.src,
         "offers": {
           "@type": "Offer",
@@ -131,7 +131,7 @@ export default function ProductDetails({ product, relatedProducts }) {
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 max-w-7xl mx-auto">
             {relatedProducts.map((relatedProduct) => (
               <div key={relatedProduct.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                <Link href={`/product/${relatedProduct.slug}`} className="block">
+                <Link href={`/product-details/${relatedProduct.slug}`} className="block">
                   <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200">
                     <Image
                       src={relatedProduct.images[0]?.src || '/placeholder.png'}

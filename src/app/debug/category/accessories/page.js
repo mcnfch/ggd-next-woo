@@ -1,45 +1,28 @@
-import { Redis } from 'ioredis';
+import Image from 'next/image';
 import ProductCard from '@/components/ProductCard';
+import { api } from '@/lib/woocommerce';
 
 export const metadata = {
-  title: 'Accessories - Debug Category Page',
-  description: 'Festival and rave accessories including scarves, sunglasses, and more'
+  title: 'Accessories - Groovy Gallery Designs',
+  description: 'Browse our collection of accessories'
 };
 
-async function getAccessoryProducts() {
-  const redis = new Redis({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
-  });
-
+async function getProducts() {
   try {
-    // Get all product keys
-    const keys = await redis.keys('product:*');
-    const products = [];
+    const response = await api.get('products', {
+      category: 'accessories',
+      per_page: 20
+    });
     
-    // Get all products
-    for (const key of keys) {
-      const productData = await redis.get(key);
-      if (productData) {
-        const product = JSON.parse(productData);
-        // Check if product belongs to accessories category
-        if (product.categories.some(cat => cat.slug === 'accessories')) {
-          products.push(product);
-        }
-      }
-    }
-
-    await redis.quit();
-    return products;
+    return response.data;
   } catch (error) {
     console.error('Error fetching products:', error);
-    await redis.quit();
     return [];
   }
 }
 
 export default async function AccessoriesPage() {
-  const products = await getAccessoryProducts();
+  const products = await getProducts();
 
   // Structured data for Google
   const structuredData = {

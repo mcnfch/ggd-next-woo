@@ -1,0 +1,209 @@
+{
+  "product": {
+    "id": 7816,
+    "title": "Op Art and Sacred Geometry Woman's Canvas Boots",
+    "description": "<p>Step into a world of bold design and striking contrasts with these unique Op Art and Sacred Geometry Monochrome Woman's Boots. These boots feature a mesmerizing combination of black-and-white geometric patterns that make a powerful fashion statement. The left boot showcases an intricate sacred geometry pattern, symbolizing the interconnectedness and harmony of the universe. The right boot boasts an eye-catching Op Art design, creating an illusion of movement and depth with its hypnotic lines. Crafted for comfort and style, these boots are perfect for those who dare to stand out. Pair them with your favorite monochrome outfits to elevate your look with an edgy, artistic flair.Care Instructions: Hand wash in cold water recommended, do not bleach and iron. It should not be exposed to the sun for a long time.</p>",
+    "base_price": "99.99",
+    "stock_status": "instock",
+    "stock_quantity": null,
+    "main_image": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-1-ziThtPP1WC__42503.1728836342.1280.1280.jpg",
+    "gallery_images": [
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-2-ziThtPP1WC__30159.1728835978.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-3-ziThtPP1WC__21342.1728835979.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-4-ziThtPP1WC__70269.1728835981.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-5-ziThtPP1WC__21662.1728835982.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-6-ziThtPP1WC__06967.1728835984.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-7-ziThtPP1WC__60700.1728835985.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-8-ziThtPP1WC__31850.1728835987.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1728835677-9-ziThtPP1WC__78182.1728835989.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/20231016153016-b2NZHy82qv__98823.1728835990.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/20231025172358-PkwjQTGEVI__76951.1728835992.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723616851-1-4on7a4aE2Q__04991.1728835993.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723616851-2-4on7a4aE2Q__53391.1728835995.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723616851-3-4on7a4aE2Q__17989.1728835996.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723616851-4-4on7a4aE2Q__92850.1728835997.1280.1280.jpg",
+      "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/20220908115945-uNS9NG7dSo__60155.1728835998.1280.1280.jpg"
+    ]
+  },
+  "variations": [
+    {
+      "id": 7817,
+      "attributes": {
+        "color": "Black",
+        "size": "US5 (EU35)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-1-v1",
+      "image": null
+    },
+    {
+      "id": 7818,
+      "attributes": {
+        "color": "Black",
+        "size": "US5.5 (EU36)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-2-v2",
+      "image": null
+    },
+    {
+      "id": 7819,
+      "attributes": {
+        "color": "Black",
+        "size": "US6 (EU37)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-3-v3",
+      "image": null
+    },
+    {
+      "id": 7820,
+      "attributes": {
+        "color": "Black",
+        "size": "US7 (EU38)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-4-v4",
+      "image": null
+    },
+    {
+      "id": 7821,
+      "attributes": {
+        "color": "Black",
+        "size": "US8 (EU39)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-5-v5",
+      "image": null
+    },
+    {
+      "id": 7822,
+      "attributes": {
+        "color": "Black",
+        "size": "US9 (EU40)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-6-v6",
+      "image": null
+    },
+    {
+      "id": 7823,
+      "attributes": {
+        "color": "Black",
+        "size": "US10 (EU41)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-7-v7",
+      "image": null
+    },
+    {
+      "id": 7824,
+      "attributes": {
+        "color": "Black",
+        "size": "US11 (EU42)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-8-v8",
+      "image": null
+    },
+    {
+      "id": 7825,
+      "attributes": {
+        "color": "Black",
+        "size": "US11.5 (EU43)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-9-v9",
+      "image": null
+    },
+    {
+      "id": 7826,
+      "attributes": {
+        "color": "Black",
+        "size": "US12 (EU44)"
+      },
+      "price": "99.99",
+      "stock_status": "instock",
+      "stock_quantity": null,
+      "sku": "N2MMMMKN-10-v10",
+      "image": null
+    }
+  ],
+  "available_attributes": {
+    "color": [
+      "Black"
+    ],
+    "size": [
+      "US10 (EU41)",
+      "US11 (EU42)",
+      "US11.5 (EU43)",
+      "US12 (EU44)",
+      "US5 (EU35)",
+      "US5.5 (EU36)",
+      "US6 (EU37)",
+      "US7 (EU38)",
+      "US8 (EU39)",
+      "US9 (EU40)"
+    ]
+  },
+  "related_products": [
+    {
+      "id": 4725,
+      "slug": "maze-runners-neon-escape",
+      "title": "Maze Runner's Neon Escape",
+      "price": "25.59",
+      "stock_status": "instock",
+      "main_image": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/2510070120214936211_1200__38728.1728019817.1280.1280-6.jpg"
+    },
+    {
+      "id": 4738,
+      "slug": "psychedelic-hexagon-hawaiian-trip-matching-set",
+      "title": "Psychedelic Hexagon Hawaiian Trip Matching Set",
+      "price": "30.07",
+      "stock_status": "instock",
+      "main_image": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723755322-1-i8fv45UqXP__81217.1728019822.1280.1280-6.jpg"
+    },
+    {
+      "id": 4752,
+      "slug": "quack-tastic-rave-duckling-bucket-hat",
+      "title": "Quack-tastic Rave Duckling Bucket Hat",
+      "price": "25.59",
+      "stock_status": "instock",
+      "main_image": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/9905223467500613562_1200__07408.1728019828.1280.1280-6.jpg"
+    },
+    {
+      "id": 4760,
+      "slug": "swirl-galaxy-rave-bucket-hat",
+      "title": "Swirl Galaxy Rave Bucket Hat",
+      "price": "25.59",
+      "stock_status": "instock",
+      "main_image": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/7855267656573492349_1200__58351.1728019832.1280.1280-6.jpg"
+    },
+    {
+      "id": 4768,
+      "slug": "swirlicious-vortex-bucket-hat",
+      "title": "Swirlicious Vortex Bucket Hat",
+      "price": "25.59",
+      "stock_status": "instock",
+      "main_image": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/11026470266417156951_1200__39009.1728019835.1280.1280-6.jpg"
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "data": {
+    "product": {
+      "id": "cG9zdDo2MDIw",
+      "name": "Surf Sacred Geometry Rave Board Shorts",
+      "slug": "surf-sacred-geometry-rave-board-shorts",
+      "image": {
+        "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723735259-1-1olfyFUw5Q__75393.1728046744.1280.1280.jpg",
+        "altText": "Vibrant boho-chic shorts featuring intricate stained glass patterns in kaleidoscopic colors, perfect for festivals and eclectic style."
+      },
+      "related": {
+        "nodes": [
+          {
+            "id": "cG9zdDo1OTg3",
+            "name": "Trip Sitter Fractal Fantasy Festival Unisex Hawaiian Shirt",
+            "slug": "trip-sitter-fractal-fantasy-festival-unisex-hawaiian-shirt",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723742432-1-iUOfGL4qKJ__58949.1728046731.1280.1280.jpg",
+              "altText": "Vibrant psychedelic shirt featuring bold designs and intricate patterns in a kaleidoscopic color palette, perfect for festivals."
+            }
+          },
+          {
+            "id": "cG9zdDo1ODA5",
+            "name": "Sacred Symmetry Rave Board Shorts",
+            "slug": "sacred-symmetry-rave-board-shorts",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723749593-1-TWQIV37Vyf__79782.1728046665.1280.1280.jpg",
+              "altText": "Vibrant psychedelic shorts featuring bold geometric designs and intricate details, perfect for festival and boho-chic styles."
+            }
+          },
+          {
+            "id": "cG9zdDo2MDM2",
+            "name": "Sacred Reflection Liquid Glass Unisex Hawaiian Shirt",
+            "slug": "sacred-reflection-liquid-glass-unisex-hawaiian-shirt",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723734537-1-OqtO8412kj__57615.1728046749.1280.1280.jpg",
+              "altText": "Bold psychedelic shirt featuring vibrant stained glass patterns and intricate designs, perfect for eclectic and festival styles."
+            }
+          },
+          {
+            "id": "cG9zdDo1ODIx",
+            "name": "Sacred Prism Unisex Rave Jersey",
+            "slug": "sacred-prism-unisex-rave-jersey",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/251838142880849777_1200__44631.1728046670.1280.1280.jpg",
+              "altText": "Psychedelic black shirt featuring vibrant pink geometric patterns and intricate designs, perfect for festival and boho-chic styles."
+            }
+          },
+          {
+            "id": "cG9zdDo2MDY2",
+            "name": "Sacred Geometry Rave Board Shorts",
+            "slug": "sacred-geometry-rave-board-shorts",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723731644-1-8c6FYbSlgO__84292.1728046762.1280.1280.jpg",
+              "altText": "Vibrant boho-chic swim shorts featuring intricate psychedelic floral designs and bold colors for a festival-ready style."
+            }
+          },
+          {
+            "id": "cG9zdDo1Nzc5",
+            "name": "Ravers Sacred Geometry Unisex Button-Up Hawaiian Shirt",
+            "slug": "ravers-sacred-geometry-unisex-button-up-hawaiian-shirt",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723750918-1-Buxd3qg1PH__06935.1728046653.1280.1280.jpg",
+              "altText": "Vibrant psychedelic shirt featuring intricate bold designs and a kaleidoscopic pattern in rainbow hues on a black background."
+            }
+          },
+          {
+            "id": "cG9zdDo0NzM4",
+            "name": "Psychedelic Hexagon Hawaiian Trip Matching Set",
+            "slug": "psychedelic-hexagon-hawaiian-trip-matching-set",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723755322-1-i8fv45UqXP__81217.1728019822.1280.1280-6.jpg",
+              "altText": "Psychedelic matching set featuring bold geometric designs and vibrant pastel patterns, perfect for festival or boho-chic styles."
+            }
+          },
+          {
+            "id": "cG9zdDo2MDkw",
+            "name": "Lost In The Sauce Fractal Fest Unisex Hawaiian Shirt",
+            "slug": "lost-in-the-sauce-fractal-fest-unisex-hawaiian-shirt",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723731161-1-qQ8CEOKZe8__05870.1728046773.1280.1280.jpg",
+              "altText": "Vibrant psychedelic shirt featuring bold, intricate patterns and kaleidoscopic designs for festival-style fashion."
+            }
+          },
+          {
+            "id": "cG9zdDo1OTcz",
+            "name": "Fractal Frenzy Rave Shorts",
+            "slug": "fractal-frenzy-rave-shorts",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723743535-1-rtg9xVRiwG__39149.1728046726.1280.1280.jpg",
+              "altText": "Vibrant psychedelic shorts featuring bold, intricate patterns in kaleidoscopic colors, perfect for eclectic festival styles."
+            }
+          },
+          {
+            "id": "cG9zdDo1NjAw",
+            "name": "Electric Sunset Rave-Ready Hoodie",
+            "slug": "electric-sunset-rave-ready-hoodie",
+            "image": {
+              "sourceUrl": "https://woo.groovygallerydesigns.com/wp-content/uploads/2024/12/1723668697-1-HtbpZGIApj__84036.1728046609.1280.1280.jpg",
+              "altText": "Vibrant, psychedelic hoodie featuring swirling blue, orange, and yellow patterns, perfect for retro and festival styles."
+            }
+          }
+        ]
+      }
+    }
+  },
+  "extensions": {
+    "debug": [
+      {
+        "type": "DEBUG_LOGS_INACTIVE",
+        "message": "GraphQL Debug logging is not active. To see debug logs, GRAPHQL_DEBUG must be enabled."
+      }
+    ]
+  }
+}

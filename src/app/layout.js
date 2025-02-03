@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import { Suspense } from 'react'
 import WooCommerceCartProvider from '../components/cart/CartProvider';
 import { AuthProvider } from '../hooks/useAuth';
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,27 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <AuthProvider>
           <WooCommerceCartProvider>
+            <Toaster 
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: '#333',
+                  color: '#fff',
+                },
+                success: {
+                  iconTheme: {
+                    primary: '#98FB98',
+                    secondary: '#333',
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: '#ff4b4b',
+                    secondary: '#333',
+                  },
+                },
+              }}
+            />
             <div className="flex flex-col min-h-screen">
               <Header />
               <main className="flex-grow">

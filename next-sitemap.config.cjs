@@ -1,15 +1,9 @@
-const { config } = require('dotenv');
 const { resolve } = require('path');
-
-// Load environment variables
-const env = process.env.NODE_ENV || 'development';
-config({ path: resolve(process.cwd(), `.env.${env}`) });
-config({ path: resolve(process.cwd(), '.env') });
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  // Default to development URL, override in production
-  siteUrl: `https://${process.env.PUBLIC_DOMAIN}`,
+  // Use FRONTEND_DOMAIN for the site URL
+  siteUrl: 'https://woo.groovygallerydesigns.com',
   generateRobotsTxt: true,
   exclude: [
     '/server-sitemap.xml', // Exclude server-side generated sitemap
@@ -20,7 +14,7 @@ module.exports = {
   robotsTxtOptions: {
     additionalSitemaps: [
       // Add dynamic sitemap for products
-      `https://${process.env.PUBLIC_DOMAIN}/server-sitemap.xml`,
+      'https://woo.groovygallerydesigns.com/sitemap.xml',
     ],
   },
   // Only generate sitemap in production build

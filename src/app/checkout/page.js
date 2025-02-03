@@ -1,31 +1,34 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { ChevronUpIcon } from '@heroicons/react/24/outline';
+import { getStripe } from '@/lib/stripe';
 import { useCart } from '@/hooks/useCart';
 import CheckoutForm from '@/components/checkout/CheckoutForm';
 
-// Initialize Stripe with test key
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST);
-
 export default function CheckoutPage() {
-  const { user } = useAuth();
   const router = useRouter();
   const { cart, loading, getStripeTotalAmount } = useCart();
   const [clientSecret, setClientSecret] = useState("");
-  const [couponCode, setCouponCode] = useState("");
-  const [couponValid, setCouponValid] = useState(false);
-  const [couponError, setCouponError] = useState(false);
-  const [discountAmount, setDiscountAmount] = useState(0);
-  const [discountPercent, setDiscountPercent] = useState(0);
+  const [paymentIntentId, setPaymentIntentId] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [error, setError] = useState(null);
+  const [sameAsShipping, setSameAsShipping] = useState(true);
+  const [currentStep, setCurrentStep] = useState(null);
+  const [billingInfo, setBillingInfo] = useState({
+    firstName: '',
+    lastName: '',
+    address1: '',
+    city: '',
+    state: '',
+    postcode: '',
+    country: 'US'
+  });
   const [shippingInfo, setShippingInfo] = useState({
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
+    firstName: '',
+    lastName: '',
     address1: '',
     city: '',
     state: '',
@@ -33,377 +36,378 @@ export default function CheckoutPage() {
     country: 'US'
   });
 
+  useEffect(() => {
+    if (sameAsShipping) {
+      setShippingInfo(billingInfo);
+    }
+  }, [sameAsShipping, billingInfo]);
+
+  useEffect(() => {
+    if (!loading && cart?.items?.length > 0) {
+      createPaymentIntent();
+    }
+  }, [cart, loading]);
+
+  const createPaymentIntent = async () => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/stripe/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: getStripeTotalAmount(),
+          metadata: {
+            cartId: cart.id,
+            existingPaymentIntentId: paymentIntentId,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create payment intent');
+      }
+
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      setPaymentIntentId(data.paymentIntentId);
+    } catch (error) {
+      setError(error.message || 'Error creating payment intent');
+      console.error('Error creating payment intent:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBillingChange = (e) => {
+    const { name, value } = e.target;
+    setBillingInfo(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
     setShippingInfo(prev => ({
       ...prev,
       [name]: value
     }));
-    // Clear validation error when field is edited
-    if (validationErrors[name]) {
-      setValidationErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
   };
 
-  const validateShippingInfo = () => {
-    const errors = {};
-    const requiredFields = [
-      { key: 'firstName', label: 'First Name' },
-      { key: 'lastName', label: 'Last Name' },
-      { key: 'address1', label: 'Address' },
-      { key: 'city', label: 'City' },
-      { key: 'state', label: 'State' },
-      { key: 'postcode', label: 'Postal Code' }
-    ];
-
-    requiredFields.forEach(({ key, label }) => {
-      if (!shippingInfo[key]?.trim()) {
-        errors[key] = `${label} is required`;
-      }
-    });
-
-    // Validate postal code format for US
-    if (shippingInfo.country === 'US' && shippingInfo.postcode) {
-      const zipRegex = /^\d{5}(-\d{4})?$/;
-      if (!zipRegex.test(shippingInfo.postcode)) {
-        errors.postcode = 'Invalid ZIP code format';
-      }
-    }
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const createPaymentIntent = async () => {
-    if (isProcessing) return;
-    
-    if (!validateShippingInfo()) {
-      return;
-    }
-
-    if (!cart || loading) {
-      alert('Please wait while your cart loads...');
-      return;
-    }
-
-    if (!cart.items?.length) {
-      alert('Your cart is empty');
-      return;
-    }
-
-    // Calculate total in cents for Stripe
-    const amountInCents = Math.round((cart.total - (discountAmount || 0)) * 100);
-    if (amountInCents < 50) {
-      alert('Order total must be at least $0.50');
-      return;
-    }
-    
-    setIsProcessing(true);
-    
-    try {
-      const response = await fetch("/api/payments/create-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: amountInCents,
-          cartId: cart.id,
-          couponCode: couponValid ? couponCode : null,
-          shipping: shippingInfo
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create payment intent');
-      }
-
-      const data = await response.json();
-      setClientSecret(data.clientSecret);
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-      alert(error.message || 'Failed to process payment. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handlePayNowClick = async () => {
-    await createPaymentIntent();
-  };
-
-  const appearance = {
-    theme: 'stripe',
-    variables: {
-      colorPrimary: '#000000',
-    },
-  };
-
-  const options = {
-    clientSecret,
-    appearance,
-  };
-
-  const validateCoupon = async () => {
-    setCouponError(false);
-    const response = await fetch(`https://woo.groovygallerydesigns.com/wp-json/wc/v3/coupons?code=${couponCode}`, {
-      headers: {
-        Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_WOOCOMMERCE_KEY}:${process.env.NEXT_PUBLIC_WOOCOMMERCE_SECRET}`)}`
-      }
-    });
-    const data = await response.json();
-    setCouponValid(data.length > 0);
-    if (data.length === 0) {
-      setCouponError(true);
-      setDiscountAmount(0);
-      setDiscountPercent(0);
-    } else {
-      const coupon = data[0];
-      const percent = parseFloat(coupon.amount);
-      setDiscountPercent(percent);
-      const discount = (cart.total * percent) / 100;
-      setDiscountAmount(discount);
-    }
-  };
-
-  const removeCoupon = () => {
-    setCouponCode('');
-    setCouponValid(false);
-    setCouponError(false);
-    setDiscountAmount(0);
-    setDiscountPercent(0);
+  const formatPrice = (price) => {
+    return Number(price).toFixed(2);
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading cart...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
   }
 
-  if (!cart?.items) {
-    return <div className="min-h-screen flex items-center justify-center">Preparing checkout...</div>;
+  if (!cart?.items?.length) {
+    return <div className="min-h-screen flex items-center justify-center text-white">Your cart is empty</div>;
+  }
+
+  const stripePromise = getStripe();
+  if (!stripePromise) {
+    return <div className="min-h-screen flex items-center justify-center text-white">Unable to load payment system</div>;
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Order Summary */}
-        <div>
-          <h2 className="text-2xl font-bold mb-4 text-white">Order Summary</h2>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex py-6">
-              <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-border">
-                <img
-                  src={cart.items[0].images?.[0]?.src || cart.items[0].images?.[0] || cart.items[0].images}
-                  alt={cart.items[0].name}
-                  className="h-full w-full object-cover object-center"
-                />
-              </div>
-              <div className="ml-4 flex flex-1 flex-col">
-                <div>
-                  <div className="flex justify-between text-base font-medium text-primary">
-                    <h3>{cart.items[0].name}</h3>
-                    <p className="ml-4">${(cart.items[0].price * cart.items[0].quantity).toFixed(2)}</p>
-                  </div>
-                  {cart.items[0].variation && Object.keys(cart.items[0].variation).length > 0 && (
-                    <p className="mt-1 text-sm text-primary">
-                      {Object.entries(cart.items[0].variation)
-                        .map(([key, value]) => `${key}: ${value}`)
-                        .join(', ')}
-                    </p>
+    <div className="min-h-screen bg-gray-900 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Cart Summary */}
+        <div className="bg-gray-800 rounded-lg p-6 mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Order Summary</h2>
+          <div className="space-y-4">
+            {cart.items.map((item) => (
+              <div key={item.id} className="flex items-center space-x-4 text-white">
+                <div className="relative w-20 h-20 flex-shrink-0 bg-gray-700 rounded">
+                  {item.images?.[0]?.src && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.images[0].src}
+                      alt={item.name}
+                      className="absolute inset-0 w-full h-full object-cover rounded"
+                    />
                   )}
-                  <p className="mt-1 text-sm text-primary">Quantity: {cart.items[0].quantity}</p>
                 </div>
-              </div>
-            </div>
-            <div className="border-t pt-4 mt-4">
-              <div className="flex justify-between">
-                <span className="font-bold text-black">Subtotal</span>
-                <span className="font-bold text-black">${cart.total.toFixed(2)}</span>
-              </div>
-              {couponValid && (
-                <div className="flex justify-between mt-2">
-                  <span className="text-black">Discount ({discountPercent}%)</span>
-                  <span className="text-black">-${discountAmount.toFixed(2)}</span>
+                <div className="flex-1">
+                  <h3 className="font-medium">{item.name}</h3>
+                  <p className="text-gray-400">Quantity: {item.quantity}</p>
                 </div>
-              )}
-              <div className="flex justify-between mt-2">
-                <span className="font-bold text-black">Total</span>
-                <span className="font-bold text-black">
-                  ${(cart.total - discountAmount).toFixed(2)}
-                </span>
+                <p className="text-lg">${formatPrice(item.price)}</p>
+              </div>
+            ))}
+            <div className="border-t border-gray-700 pt-4 mt-4">
+              <div className="flex justify-between text-white">
+                <span>Total</span>
+                <span className="text-xl font-bold">${formatPrice(cart.total)}</span>
               </div>
             </div>
-            <div className="mt-4 flex gap-2">
-              <input
-                type="text"
-                value={couponCode}
-                onChange={(e) => {
-                  setCouponCode(e.target.value);
-                  setCouponError(false);
-                }}
-                className="border rounded px-2 py-1 text-black"
-                placeholder="Discount code"
-              />
-              {!couponValid ? (
-                <button
-                  onClick={validateCoupon}
-                  className="bg-black text-white px-4 py-1 rounded"
-                >
-                  Apply
-                </button>
-              ) : (
-                <button
-                  onClick={removeCoupon}
-                  className="bg-black text-white px-4 py-1 rounded"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-            {couponValid && (
-              <p className="text-green-600 mt-2">
-                Discount code applied - You saved ${discountAmount.toFixed(2)}
-              </p>
-            )}
-            {couponError && (
-              <p className="text-red-600 mt-2">Invalid code</p>
-            )}
           </div>
         </div>
 
-        {/* Checkout Form */}
-        <div>
-          <h2 className="text-2xl font-bold mb-4 text-white">Checkout</h2>
-          <div className="bg-white p-6 rounded-lg shadow">
-            {!clientSecret ? (
-              <>
-                <h3 className="text-lg font-semibold mb-4 text-black">Shipping Information</h3>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={shippingInfo.firstName}
-                        onChange={handleShippingChange}
-                        className={`block w-full rounded-md border px-3 py-2 text-black ${
-                          validationErrors.firstName ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
-                      {validationErrors.firstName && (
-                        <p className="mt-1 text-sm text-red-600">{validationErrors.firstName}</p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={shippingInfo.lastName}
-                        onChange={handleShippingChange}
-                        className={`block w-full rounded-md border px-3 py-2 text-black ${
-                          validationErrors.lastName ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
-                      {validationErrors.lastName && (
-                        <p className="mt-1 text-sm text-red-600">{validationErrors.lastName}</p>
-                      )}
-                    </div>
+        {/* Checkout Steps */}
+        <div className="space-y-4">
+          {/* Billing Section */}
+          <div className="bg-gray-800 rounded-lg">
+            <button
+              className="flex justify-between w-full px-6 py-4 text-left text-white"
+              onClick={() => setCurrentStep(currentStep === 'billing' ? null : 'billing')}
+            >
+              <span className="text-lg font-medium">1. Billing Information</span>
+              <ChevronUpIcon 
+                className={`${currentStep === 'billing' ? 'transform rotate-180' : ''} w-5 h-5`}
+              />
+            </button>
+            <div className={`${currentStep === 'billing' ? 'block' : 'hidden'} px-6 pb-6`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white">First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={billingInfo.firstName}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={billingInfo.lastName}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-white">Address</label>
+                  <input
+                    type="text"
+                    name="address1"
+                    value={billingInfo.address1}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white">City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={billingInfo.city}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white">State</label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={billingInfo.state}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white">Postal Code</label>
+                  <input
+                    type="text"
+                    name="postcode"
+                    value={billingInfo.postcode}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white">Country</label>
+                  <input
+                    type="text"
+                    name="country"
+                    value={billingInfo.country}
+                    onChange={handleBillingChange}
+                    className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Shipping Section */}
+          <div className="bg-gray-800 rounded-lg">
+            <button
+              className="flex justify-between w-full px-6 py-4 text-left text-white"
+              onClick={() => setCurrentStep(currentStep === 'shipping' ? null : 'shipping')}
+            >
+              <span className="text-lg font-medium">2. Shipping Information</span>
+              <ChevronUpIcon 
+                className={`${currentStep === 'shipping' ? 'transform rotate-180' : ''} w-5 h-5`}
+              />
+            </button>
+            <div className={`${currentStep === 'shipping' ? 'block' : 'hidden'} px-6 pb-6`}>
+              <div className="mb-4">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={sameAsShipping}
+                    onChange={(e) => setSameAsShipping(e.target.checked)}
+                    className="rounded border-gray-600 bg-gray-700 text-purple-600 focus:ring-purple-500"
+                  />
+                  <span className="text-white">Same as billing address</span>
+                </label>
+              </div>
+
+              {!sameAsShipping && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white">First Name</label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={shippingInfo.firstName}
+                      onChange={handleShippingChange}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <label className="block text-sm font-medium text-white">Last Name</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={shippingInfo.lastName}
+                      onChange={handleShippingChange}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-white">Address</label>
                     <input
                       type="text"
                       name="address1"
                       value={shippingInfo.address1}
                       onChange={handleShippingChange}
-                      className={`block w-full rounded-md border px-3 py-2 text-black ${
-                        validationErrors.address1 ? 'border-red-500' : 'border-gray-300'
-                      }`}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
                     />
-                    {validationErrors.address1 && (
-                      <p className="mt-1 text-sm text-red-600">{validationErrors.address1}</p>
-                    )}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={shippingInfo.city}
-                        onChange={handleShippingChange}
-                        className={`block w-full rounded-md border px-3 py-2 text-black ${
-                          validationErrors.city ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
-                      {validationErrors.city && (
-                        <p className="mt-1 text-sm text-red-600">{validationErrors.city}</p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
-                      <input
-                        type="text"
-                        name="state"
-                        value={shippingInfo.state}
-                        onChange={handleShippingChange}
-                        className={`block w-full rounded-md border px-3 py-2 text-black ${
-                          validationErrors.state ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
-                      {validationErrors.state && (
-                        <p className="mt-1 text-sm text-red-600">{validationErrors.state}</p>
-                      )}
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white">City</label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={shippingInfo.city}
+                      onChange={handleShippingChange}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
+                    />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
-                      <input
-                        type="text"
-                        name="postcode"
-                        value={shippingInfo.postcode}
-                        onChange={handleShippingChange}
-                        className={`block w-full rounded-md border px-3 py-2 text-black ${
-                          validationErrors.postcode ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
-                      {validationErrors.postcode && (
-                        <p className="mt-1 text-sm text-red-600">{validationErrors.postcode}</p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                      <select
-                        name="country"
-                        value={shippingInfo.country}
-                        onChange={handleShippingChange}
-                        className="block w-full rounded-md border border-gray-300 px-3 py-2 text-black"
-                      >
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white">State</label>
+                    <input
+                      type="text"
+                      name="state"
+                      value={shippingInfo.state}
+                      onChange={handleShippingChange}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
+                    />
                   </div>
-                  <button
-                    onClick={createPaymentIntent}
-                    disabled={isProcessing}
-                    className="w-full bg-black text-white py-3 px-4 rounded-md hover:bg-gray-900 disabled:bg-gray-400 mt-6"
-                  >
-                    {isProcessing ? "Processing..." : "Continue to Payment"}
-                  </button>
+                  <div>
+                    <label className="block text-sm font-medium text-white">Postal Code</label>
+                    <input
+                      type="text"
+                      name="postcode"
+                      value={shippingInfo.postcode}
+                      onChange={handleShippingChange}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white">Country</label>
+                    <input
+                      type="text"
+                      name="country"
+                      value={shippingInfo.country}
+                      onChange={handleShippingChange}
+                      className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 text-white px-3 py-2"
+                      required
+                    />
+                  </div>
                 </div>
-              </>
-            ) : (
-              <Elements options={options} stripe={stripePromise}>
-                <CheckoutForm />
-              </Elements>
-            )}
+              )}
+            </div>
+          </div>
+
+          {/* Payment Section */}
+          <div className="bg-gray-800 rounded-lg">
+            <button
+              className="flex justify-between w-full px-6 py-4 text-left text-white"
+              onClick={() => setCurrentStep(currentStep === 'payment' ? null : 'payment')}
+              disabled={!clientSecret}
+            >
+              <span className="text-lg font-medium">3. Payment Information</span>
+              <ChevronUpIcon 
+                className={`${currentStep === 'payment' ? 'transform rotate-180' : ''} w-5 h-5`}
+              />
+            </button>
+            <div className={`${currentStep === 'payment' ? 'block' : 'hidden'} px-6 pb-6`}>
+              {error && (
+                <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded mb-4">
+                  {error}
+                </div>
+              )}
+              
+              {!clientSecret ? (
+                <button
+                  onClick={createPaymentIntent}
+                  disabled={isProcessing}
+                  className="w-full bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 disabled:bg-gray-600"
+                >
+                  {isProcessing ? 'Processing...' : 'Continue to Payment'}
+                </button>
+              ) : (
+                <Elements 
+                  stripe={stripePromise} 
+                  options={{
+                    clientSecret,
+                    appearance: {
+                      theme: 'night',
+                      variables: {
+                        colorPrimary: '#7c3aed',
+                        colorBackground: '#1f2937',
+                        colorText: '#ffffff',
+                        colorDanger: '#dc2626',
+                        fontFamily: 'Inter var, sans-serif',
+                      },
+                    },
+                  }}
+                >
+                  <CheckoutForm 
+                    clientSecret={clientSecret}
+                    billingInfo={billingInfo}
+                    shippingInfo={shippingInfo}
+                  />
+                </Elements>
+              )}
+            </div>
           </div>
         </div>
       </div>
