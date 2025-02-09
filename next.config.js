@@ -27,6 +27,30 @@ const nextConfig = {
       allowedOrigins: ['localhost:3010', 'woo.groovygallerydesigns.com'],
     },
   },
-}
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap.xml'
+      },
+      {
+        source: '/sitemap-products.xml',
+        destination: '/api/sitemap-products.xml'
+      },
+      {
+        source: '/sitemap-categories.xml',
+        destination: '/api/sitemap-categories.xml'
+      },
+      {
+        source: '/sitemap-blog.xml',
+        destination: '/api/sitemap-blog.xml'
+      },
+      {
+        source: '/sitemap-pages.xml',
+        destination: '/api/sitemap-pages.xml'
+      }
+    ];
+  }
+};
 
 export default nextConfig;

@@ -22,7 +22,7 @@ const ProductDetailsPage = async (props) => {
             The product URL appears to be invalid. Please check the URL and try again.
           </p>
           <Link 
-            href="https://dev.groovygallerydesigns.com/" 
+            href="/" 
             className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200"
           >
             Return to Shop
@@ -47,7 +47,7 @@ const ProductDetailsPage = async (props) => {
           </p>
           <div className="space-y-4">
             <Link 
-              href="https://dev.groovygallerydesigns.com/" 
+              href="/" 
               className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200"
             >
               Browse Our Shop

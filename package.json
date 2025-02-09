@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3010",
+    "dev": "next dev -p 3040",
     "clean": "rm -rf .next",
     "build": "npm run clean && next build",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
-    "start": "next start -p 3040 -H 0.0.0.0",
+    "start": "next start",
     "stop": "pm2 delete ecosystem.config.cjs",
     "lint": "next lint",
     "generate-sitemaps": "node src/utils/sitemap/generate-sitemaps.mjs"
@@ -36,6 +36,7 @@
     "stripe": "^17.5.0",
     "supports-color": "^10.0.0",
     "use-shopping-cart": "^3.1.0",
+    "xml2js": "^0.6.2",
     "xmlbuilder2": "^3.1.1"
   },
   "devDependencies": {

@@ -230,7 +230,7 @@ export default function ProductDetailsClient({ productData }) {
         {/* Right Column - Product Details */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">{product.title}</h1>
+            <h2 className="text-2xl font-bold !text-white text-opacity-100 mb-2 [color:white]">{product.name}</h2>
             <p className="text-3xl font-bold text-white">${currentVariation?.price || product.price}</p>
           </div>
 
