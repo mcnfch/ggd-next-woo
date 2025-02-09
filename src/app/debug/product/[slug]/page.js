@@ -1,6 +1,6 @@
-import { Redis } from 'ioredis';
 import Image from 'next/image';
 import ProductCard from '@/components/ProductCard';
+import { api } from '@/lib/woocommerce';
 
 export const metadata = {
   title: 'Product Page',
@@ -8,45 +8,33 @@ export const metadata = {
 };
 
 async function getProduct(slug) {
-  const redis = new Redis({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
-  });
-
   try {
-    // Get all product keys
-    const keys = await redis.keys('product:*');
+    // Get product by slug
+    const productsResponse = await api.get('products', {
+      slug: slug,
+      per_page: 1
+    });
     
-    // Search through products to find the one with matching slug
-    for (const key of keys) {
-      const productData = await redis.get(key);
-      if (productData) {
-        const product = JSON.parse(productData);
-        if (product.slug === slug) {
-          // Get related products
-          const relatedProducts = [];
-          for (const relatedId of product.related_ids) {
-            const relatedData = await redis.get(`product:${relatedId}`);
-            if (relatedData) {
-              relatedProducts.push(JSON.parse(relatedData));
-            }
-          }
-          
-          // Update metadata dynamically
-          metadata.title = `${product.name} - Groovy Gallery Designs`;
-          metadata.description = product.description.replace(/<[^>]*>/g, '');
-          
-          await redis.quit();
-          return { product, relatedProducts };
-        }
-      }
+    if (!productsResponse.data || productsResponse.data.length === 0) {
+      return { product: null, relatedProducts: [] };
     }
+
+    const product = productsResponse.data[0];
     
-    await redis.quit();
-    return { product: null, relatedProducts: [] };
+    // Get related products
+    const relatedResponse = await api.get(`products/${product.id}/related`, {
+      per_page: 4
+    });
+    
+    const relatedProducts = relatedResponse.data;
+    
+    // Update metadata dynamically
+    metadata.title = `${product.name} - Groovy Gallery Designs`;
+    metadata.description = product.description.replace(/<[^>]*>/g, '');
+    
+    return { product, relatedProducts };
   } catch (error) {
     console.error('Error fetching product:', error);
-    await redis.quit();
     return { product: null, relatedProducts: [] };
   }
 }

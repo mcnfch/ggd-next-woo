@@ -36,7 +36,7 @@ export default function ProductCard({ product }) {
 
   // Use environment variables for domain
   const frontendDomain = process.env.NEXT_PUBLIC_FRONTEND_URL || '';
-  const permalink = frontendDomain + '/product/' + product.slug;
+  const permalink = frontendDomain + '/product-details/' + product.slug;
   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">

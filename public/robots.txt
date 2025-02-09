@@ -1,19 +1,9 @@
 # *
 User-agent: *
 Allow: /
-Disallow: /api/*
-Disallow: /admin/*
-Disallow: /cart
-Disallow: /checkout/*
-Disallow: /search
-Disallow: /account/*
 
 # Host
-Host: https://groovygallerydesigns.com
+Host: https://woo.groovygallerydesigns.com
 
 # Sitemaps
-Sitemap: https://groovygallerydesigns.com/sitemap.xml
-Sitemap: https://groovygallerydesigns.com/sitemap-products.xml
-Sitemap: https://groovygallerydesigns.com/sitemap-categories.xml
-Sitemap: https://groovygallerydesigns.com/sitemap-images.xml
-Sitemap: https://groovygallerydesigns.com/sitemap-blog.xml
+Sitemap: https://woo.groovygallerydesigns.com/sitemap.xml

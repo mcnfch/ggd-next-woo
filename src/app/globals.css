@@ -79,7 +79,8 @@ body {
 }
 
 .blocks-gallery-item {
-    @apply relative aspect-square rounded-xl overflow-hidden;
+    @apply relative rounded-xl overflow-hidden;
+    aspect-ratio: 1;
 }
 
 .blocks-gallery-item img {
@@ -91,7 +92,8 @@ body {
 }
 
 .wp-block-embed iframe {
-    @apply rounded-xl shadow-md w-full aspect-video;
+    @apply rounded-xl shadow-md w-full;
+    aspect-ratio: 16 / 9;
 }
 
 .wp-block-separator {

@@ -53,6 +53,13 @@ const Header = ({ children }) => {
     }));
   };
 
+  const toggleMobileMenu = (value) => {
+    setMobileMenuOpen(value);
+    if (!value) { // if we're closing the menu
+      setExpandedItems({});
+    }
+  };
+
   return (
     <header className="bg-black sticky top-0 z-50 shadow-md">
       <nav className="container mx-auto px-4 py-4">
@@ -103,7 +110,7 @@ const Header = ({ children }) => {
                   ))}
                   <div className="relative group">
                     <Link
-                      href="https://dev.groovygallerydesigns.com/custom-designs"
+                      href="/custom-designs"
                       className="text-white py-4"
                     >
                       Custom Designs
@@ -149,7 +156,7 @@ const Header = ({ children }) => {
 
               {/* Mobile menu button */}
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                onClick={() => toggleMobileMenu(!mobileMenuOpen)}
                 className="md:hidden p-2 text-white"
                 aria-label={`${mobileMenuOpen ? 'Close' : 'Open'} menu`}
                 aria-expanded={mobileMenuOpen}
@@ -191,7 +198,7 @@ const Header = ({ children }) => {
                       <Link
                         href={item.url}
                         className="text-white py-2 block"
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={() => toggleMobileMenu(false)}
                       >
                         {item.title}
                       </Link>
@@ -223,7 +230,7 @@ const Header = ({ children }) => {
                             key={`mobile-submenu-${child.id}`}
                             href={child.url}
                             className="text-white py-2 pl-4 block break-words whitespace-normal"
-                            onClick={() => setMobileMenuOpen(false)}
+                            onClick={() => toggleMobileMenu(false)}
                           >
                             {child.title}
                           </Link>
@@ -234,9 +241,9 @@ const Header = ({ children }) => {
                 ))}
                 <div>
                   <Link
-                    href="https://dev.groovygallerydesigns.com/custom-designs"
+                    href="/custom-designs"
                     className="text-white py-2 block"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => toggleMobileMenu(false)}
                   >
                     Custom Designs
                   </Link>

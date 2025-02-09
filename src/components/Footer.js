@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { fetchFooterMenu } from '@/utils/api';
@@ -88,8 +89,8 @@ export default async function Footer() {
 
                     {/* Blog Section */}
                     <div>
-                        <Link href="https://dev.groovygallerydesigns.com/blog" className="hover:text-white transition-colors">
-                            <h3 className="text-lg font-semibold mb-4">Latest Blog Posts</h3>
+                        <Link href="/blog" className="hover:text-white transition-colors">
+                            Blog
                         </Link>
                         <BlogCarousel />
                     </div>

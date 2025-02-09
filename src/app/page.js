@@ -19,7 +19,7 @@ export default async function Home() {
           "@type": "Product",
           "name": "New Festival Fashion Arrivals",
           "description": "Latest festival fashion and accessories",
-          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/category/new-arrivals`,
+          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/product-category/new-arrivals`,
           "brand": {
             "@type": "Brand",
             "name": "Groovy Gallery Designs"
@@ -42,7 +42,7 @@ export default async function Home() {
           "@type": "Product",
           "name": "Festival Accessories Collection",
           "description": "Complete your festival look with our accessories collection",
-          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/category/accessories`,
+          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/product-category/accessories`,
           "brand": {
             "@type": "Brand",
             "name": "Groovy Gallery Designs"
@@ -65,7 +65,7 @@ export default async function Home() {
           "@type": "Product",
           "name": "Women's Festival Fashion Collection",
           "description": "Festival fashion for women",
-          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/category/womens`,
+          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/product-category/womens`,
           "brand": {
             "@type": "Brand",
             "name": "Groovy Gallery Designs"
@@ -88,7 +88,7 @@ export default async function Home() {
           "@type": "Product",
           "name": "Men's Festival Fashion Collection",
           "description": "Festival fashion for men",
-          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/category/mens`,
+          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/product-category/mens`,
           "brand": {
             "@type": "Brand",
             "name": "Groovy Gallery Designs"
@@ -111,7 +111,7 @@ export default async function Home() {
           "@type": "Product",
           "name": "Festival Comfort Essentials Collection",
           "description": "Essential comfort items for festival-goers",
-          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/category/essentials`,
+          "url": `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/product-category/essentials`,
           "brand": {
             "@type": "Brand",
             "name": "Groovy Gallery Designs"
@@ -181,7 +181,7 @@ export default async function Home() {
             {categories.map((category) => {
               // Special handling for Custom Designs
               const isCustomDesigns = category.slug === 'custom-designs';
-              const href = isCustomDesigns ? "/custom-designs" : `/category/${category.slug}`;
+              const href = isCustomDesigns ? "/custom-designs" : `/product-category/${category.slug}`;
               const description = isCustomDesigns 
                 ? "Create your own unique piece with our custom design service"
                 : category.description || `Explore our ${category.name} collection`;

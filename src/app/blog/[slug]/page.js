@@ -140,58 +140,6 @@ export default async function BlogPost(props) {
                         prose-blockquote:border-l-4 prose-blockquote:border-purple-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:bg-purple-50 prose-blockquote:py-2 prose-blockquote:rounded-r-lg"
                 >
                     {/* Key Takeaways Section */}
-                    <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-blue-50 rounded-xl p-8 my-12 shadow-md">
-                        <h2 className="text-2xl font-bold mb-6 text-purple-900 flex items-center">
-                            <span className="text-3xl mr-3">💫</span>
-                            Key Takeaways for Hulaween 2024
-                        </h2>
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-purple-900">
-                            {[
-                                ["🏕️", "Plan your arrival and camping strategy early"],
-                                ["👗", "Express yourself with creative festival fashion"],
-                                ["📱", "Download the official Hula app for updates"],
-                                ["💧", "Stay hydrated and energized throughout"],
-                                ["📜", "Know and follow festival policies"],
-                                ["🎨", "Explore the art installations"],
-                                ["🎵", "Experience diverse music lineup"],
-                                ["🤝", "Connect with the Hula community"],
-                                ["🌦️", "Prepare for Florida weather"],
-                                ["♻️", "Practice Leave No Trace"]
-                            ].map(([icon, text], index) => (
-                                <li key={index} className="flex items-center bg-white/50 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-                                    <span className="text-2xl mr-3 flex-shrink-0">{icon}</span>
-                                    <span className="font-medium">{text}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Prohibited Items Section */}
-                    <div className="bg-gradient-to-br from-red-50 via-red-100 to-orange-50 rounded-xl p-8 my-12 shadow-md">
-                        <h3 className="text-xl font-bold mb-6 text-red-900 flex items-center">
-                            <span className="text-3xl mr-3">⚠️</span>
-                            Prohibited Items at Hulaween 2024
-                        </h3>
-                        <ul className="grid gap-3 text-red-900">
-                            {[
-                                ["🚫", "Weapons of any kind", "Strictly forbidden for safety"],
-                                ["⛔", "Illegal substances", "Zero tolerance policy"],
-                                ["🛸", "Drones and flying objects", "Including kites and balloons"],
-                                ["🏊", "Inflatable pools", "Including slip n' slides"],
-                                ["💡", "Lasers", "All types prohibited"],
-                                ["🔥", "Fire spinning/twirling", "Unless contracted"],
-                                ["🏮", "Floating lanterns", "Fire hazard"]
-                            ].map(([icon, item, detail], index) => (
-                                <li key={index} className="flex items-center bg-white/50 rounded-lg p-3 shadow-sm">
-                                    <span className="text-2xl mr-3 flex-shrink-0">{icon}</span>
-                                    <div>
-                                        <span className="font-medium block">{item}</span>
-                                        <span className="text-sm text-red-700/80">{detail}</span>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
 
                     {/* Main Content */}
                     <div 

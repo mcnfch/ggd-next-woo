@@ -1,6 +1,7 @@
 import { Redis } from 'ioredis';
 import { Suspense } from 'react';
 import ProductDetails from '@/components/product/ProductDetails';
+import { api } from '@/lib/woocommerce'; // Assuming api is defined in this file
 
 export const generateMetadata = async ({ params }) => {
   const resolvedParams = await params;
@@ -28,13 +29,10 @@ async function getProduct(slug) {
         const product = JSON.parse(productData);
         if (product.slug === slug) {
           // Get related products
-          const relatedProducts = [];
-          for (const relatedId of product.related_ids || []) {
-            const relatedData = await redis.get(`product:${relatedId}`);
-            if (relatedData) {
-              relatedProducts.push(JSON.parse(relatedData));
-            }
-          }
+          const relatedResponse = await api.get(`products/${product.id}/related`, {
+            per_page: 4
+          });
+          const relatedProducts = relatedResponse.data;
           
           await redis.quit();
           return { product, relatedProducts };
